@@ -3,11 +3,13 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Pressable 
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeButton from '@/components/HomeButton';
 import DonutProgress from '@/components/DonutProgress';
+import Accordion from '@/components/Accordion';
 
 export default function DiaryView() {
   const total_pages = 1200;
   const entry_pages = [10, 20, 120, 30, 40, 50, 80, 100, 10, 20, 120, 30, 40, 50, 80, 100];
   const entry_reaction = [5, 2, 3, 3, 5, 2, 4, 5, 5, 5, 3, 1, 5, 5, 4, 5];
+  const friend_entries = []
   const diary_entries = entry_pages.length;
   let read_pages = entry_pages.reduce(function (x,y) {return x + y;}, 0) 
   let progress = read_pages / total_pages * 100;
@@ -68,34 +70,40 @@ export default function DiaryView() {
                        max={5}/>
         </View>
       </View>
-
-      {/* User entries */}
-      <View style={styles.sectionBox}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Own latest entries</Text>
-          <Text style={styles.plus}>+</Text>
-        </View>
-
-        {[1, 2, 3].map((i) => (
-          <View key={i} style={styles.entryRow}>
-            <View style={styles.entryLine} />
+      {/* USER ENTRY HISTORY */}
+      <Accordion title="Own latest entries">
+      {entry_pages.map((e, i) => (
+          <View
+          key={i}
+          style={{
+              paddingVertical: 8,
+              backgroundColor: "#eee",
+              borderRadius: 6
+          }}
+          >
+          <Text>Entry #{i + 1}</Text>
+          {/*<Text>Pages: {e.start} - {e.end}</Text> */}
+          <Text></Text>
           </View>
-        ))}
-      </View>
+      ))}
+      </Accordion>
 
-      {/* Friend activity */}
-      <View style={styles.sectionBox}>
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Shared friend activity</Text>
-          <Text style={styles.plus}>+</Text>
-        </View>
-
-        {[1, 2].map((i) => (
-          <View key={i} style={styles.entryRow}>
-            <View style={styles.entryLine} />
+      {/* SHARED FRIEND ACTIVITY */}
+      <Accordion title="Shared friend activity">
+      {friend_entries.map((f, idx) => (
+          <View
+          key={idx}
+          style={{
+              paddingVertical: 8,
+              backgroundColor: "#eee",
+              borderRadius: 6
+          }}
+          >
+          <Text>{f.friendName}</Text>
+          <Text>Entry: {f.title}</Text>
           </View>
-        ))}
-      </View>
+      ))}
+      </Accordion>
 
       {/* Bottom spacing */}
       <View style={{ height: 100 }} />
@@ -104,9 +112,10 @@ export default function DiaryView() {
 }
 
 const styles = StyleSheet.create({
+  /*bg: #8a7768*/
   container: {
     flex: 1,
-    backgroundColor: "#fdfdfd",
+    backgroundColor: "#fff",
   },
 
   /* --- Header --- */
@@ -119,7 +128,7 @@ const styles = StyleSheet.create({
     height: 25,
     borderRadius: 3,
     borderWidth: 2,
-    borderColor: "#333",
+    borderColor: "#bbb",
   },
   header: {
     alignItems: "center",
@@ -139,7 +148,7 @@ const styles = StyleSheet.create({
   coverPlaceholder: {
     width: 210,
     height: 297,
-    backgroundColor: "#ddd",
+    backgroundColor: "#aaa",
     borderWidth: 1,
     borderColor: "#aaa",
     borderRadius: 6,
@@ -157,18 +166,19 @@ const styles = StyleSheet.create({
     marginBottom: 30,
     width: '100%',
     borderWidth: 4,
-    borderColor: '#ffd33d',
-    borderRadius: 18,
+    borderColor: '#ccc',
+    backgroundColor: "#ccc",
+    borderRadius: 10,
   },
   timelineBar: {
     width: 20,
     height: 90,
     borderWidth: 1,
-    borderColor: "#aaa",
+    borderColor: "#bbb",
     justifyContent: "flex-end",
   },
   timelineFill: {
-    backgroundColor: "#bbb",
+    backgroundColor: "#aaa",
     width: "100%",
   },
 
@@ -185,6 +195,7 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 10,
     alignItems: "center",
+    backgroundColor: "#ccc",
   },
   widgetLabel: {
     marginBottom: 10,
