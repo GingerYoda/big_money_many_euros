@@ -1,22 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, Image, Pressable } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeButton from '@/components/HomeButton';
 import DonutProgress from '@/components/DonutProgress';
 import Accordion from '@/components/Accordion';
-import { styles } from '@/styles/styles'
+import { styles } from '@/styles/styles';
+import EntryModal from '@/components/EntryModal';
+import { sampleEntries } from '@/helpers/samples';
+
 
 export default function DiaryView() {
-  const total_pages = 1200;
-  const entry_pages = [10, 20, 120, 30, 40, 50, 80, 100, 10, 20, 120, 30, 40, 50, 80, 100];
-  const entry_reaction = [5, 2, 3, 3, 5, 2, 4, 5, 5, 5, 3, 1, 5, 5, 4, 5];
+  const totalPages = 1200;
   const friend_entries = []
-  const diary_entries = entry_pages.length;
-  let read_pages = entry_pages.reduce(function (x,y) {return x + y;}, 0) 
-  let progress = read_pages / total_pages * 100;
+  const diary_entries = sampleEntries.length;
+  let read_pages = sampleEntries.reduce((sum, x) => sum + x.endPage - x.startPage, 0) 
+  let progress = read_pages / totalPages * 100;
 
-  let ratings_avg = entry_reaction.reduce((x,y) => x + y, 0) / diary_entries;
+  let ratings_avg = sampleEntries.reduce((sum, x) => sum + x.rating, 0) / diary_entries;
   let ratings_percent = ratings_avg / 5 * 100;
+
+  const [entryModalOpen, entryModalSetOpen] = useState(false);
+  const [modalData, setModalData] = useState(null);
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: 20 }}>
@@ -47,11 +51,28 @@ export default function DiaryView() {
       {/* Progress timeline */}
       <Text style={styles.sectionLabel}>Progress</Text>
       <View style={styles.timelineContainer}>
-        {entry_pages.map((item, i) => (
-          <Pressable key={i} style={[styles.timelineBar, { width: entry_pages[i]/total_pages*100 + "%" }]}>
-            <View style={[styles.timelineFill, { height: entry_reaction[i]/5*100+"%"}]} />
+        {sampleEntries.map((item, i) => (
+          <Pressable key={i} style={[styles.timelineBar, { width: (item.endPage-item.startPage)/totalPages*100 + "%" }]}
+          onPress={() => {
+              entryModalSetOpen(true);
+              setModalData({
+                  startPage: item.startPage,
+                  endPage: item.endPage,
+                  rating: item.rating,
+                  comment: item.comment,
+              })
+          }}>
+            <View style={[styles.timelineFill, { height: item.rating/5*100+"%"}]} />
           </Pressable>
         ))}
+        {modalData && (
+            <EntryModal visible={entryModalOpen} onClose={() => entryModalSetOpen(false)}
+            startPage={modalData.startPage}
+            endPage={modalData.endPage}
+            rating={modalData.rating}
+            comment={modalData.comment}
+            />
+        )}
       </View>
 
       {/* Dashboard widgets */}
@@ -60,7 +81,7 @@ export default function DiaryView() {
         <DonutProgress label="Progress"
                        percent={progress}
                        value={progress}
-                       max={total_pages}/>
+                       max={totalPages}/>
         </View>
 
         <View style={styles.widget}>
@@ -74,7 +95,7 @@ export default function DiaryView() {
 
       {/* USER ENTRY HISTORY */}
       <Accordion title="Own latest entries">
-      {entry_pages.map((e, i) => (
+      {sampleEntries.map((e, i) => (
           <View key={i} style={styles.accordion} >
               <Text>Entry #{i + 1}</Text>
           </View>
