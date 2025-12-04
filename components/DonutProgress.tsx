@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
+import { colours } from "../styles/colours"
 
 type Props = {
     label: string;
@@ -17,8 +18,8 @@ export default function DonutProgress({label, percent, value, max, mode}: Props)
         size={120}
         width={14}
         fill={percent}               
-        tintColor="#4c8bf5"
-        backgroundColor="#e0e0e0"
+        tintColor={colours.secondary}
+        backgroundColor={colours.bg2}
         rotation={0}
         lineCap="round"
         duration={800}

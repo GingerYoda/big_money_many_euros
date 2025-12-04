@@ -1,13 +1,6 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  LayoutAnimation,
-  Platform,
-  UIManager,
-  StyleSheet
-} from "react-native";
+import { View, Text, TouchableOpacity, LayoutAnimation, Platform, UIManager, } from "react-native";
+import { styles } from '@/styles/styles'
 
 if (Platform.OS === "android" && UIManager.setLayoutAnimationEnabledExperimental) {
   UIManager.setLayoutAnimationEnabledExperimental(true);
@@ -27,42 +20,14 @@ export default function Accordion({ title, children }: AccordionProps) {
   };
 
   return (
-    <View style={styles.wrapper}>
-      <TouchableOpacity style={styles.header} onPress={toggle}>
-        <Text style={styles.headerText}>{title}</Text>
-        <Text style={styles.arrow}>{open ? "−" : "+"}</Text>
+    <View style={styles.accordionWrapper}>
+      <TouchableOpacity style={styles.accordionHeader} onPress={toggle}>
+        <Text style={styles.accordionHeaderText}>{title}</Text>
+        <Text style={styles.accordionArrow}>{open ? "−" : "+"}</Text>
       </TouchableOpacity>
 
-      {open && <View style={styles.content}>{children}</View>}
+      {open && <View style={styles.accordionContent}>{children}</View>}
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  wrapper: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    marginBottom: 20,
-    overflow: "hidden"
-  },
-  header: {
-    padding: 15,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    backgroundColor: "#f0f0f0"
-  },
-  headerText: {
-    fontSize: 16,
-    fontWeight: "600"
-  },
-  arrow: {
-    fontSize: 22,
-    fontWeight: "600"
-  },
-  content: {
-    padding: 12,
-    backgroundColor: "#fff",
-    gap: 10
-  }
-});

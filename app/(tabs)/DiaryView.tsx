@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Pressable } from "react-native";
+import { View, Text, ScrollView, Image, Pressable } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeButton from '@/components/HomeButton';
 import DonutProgress from '@/components/DonutProgress';
 import Accordion from '@/components/Accordion';
+import { styles } from '@/styles/styles'
 
 export default function DiaryView() {
   const total_pages = 1200;
@@ -70,37 +71,22 @@ export default function DiaryView() {
                        max={5}/>
         </View>
       </View>
+
       {/* USER ENTRY HISTORY */}
       <Accordion title="Own latest entries">
       {entry_pages.map((e, i) => (
-          <View
-          key={i}
-          style={{
-              paddingVertical: 8,
-              backgroundColor: "#eee",
-              borderRadius: 6
-          }}
-          >
-          <Text>Entry #{i + 1}</Text>
-          {/*<Text>Pages: {e.start} - {e.end}</Text> */}
-          <Text></Text>
+          <View key={i} style={styles.accordion} >
+              <Text>Entry #{i + 1}</Text>
           </View>
       ))}
       </Accordion>
 
       {/* SHARED FRIEND ACTIVITY */}
       <Accordion title="Shared friend activity">
-      {friend_entries.map((f, idx) => (
-          <View
-          key={idx}
-          style={{
-              paddingVertical: 8,
-              backgroundColor: "#eee",
-              borderRadius: 6
-          }}
-          >
-          <Text>{f.friendName}</Text>
-          <Text>Entry: {f.title}</Text>
+      {friend_entries.map((f, i) => (
+          <View key={i} style={accordion}>
+              <Text>{f.friendName}</Text>
+              <Text>Entry: {f.title}</Text>
           </View>
       ))}
       </Accordion>
@@ -111,135 +97,3 @@ export default function DiaryView() {
   );
 }
 
-const styles = StyleSheet.create({
-  /*bg: #8a7768*/
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-  },
-
-  /* --- Header --- */
-  topNav: {
-    height: 40,
-    justifyContent: "center",
-  },
-  navIcon: {
-    width: 25,
-    height: 25,
-    borderRadius: 3,
-    borderWidth: 2,
-    borderColor: "#bbb",
-  },
-  header: {
-    alignItems: "center",
-    marginBottom: 30,
-  },
-  bookTitle: {
-    fontSize: 24,
-    fontWeight: "600",
-    textAlign: "center"
-  },
-  author: {
-    fontSize: 14,
-    marginTop: 5,
-    opacity: 0.7,
-    textAlign: "center"
-  },
-  coverPlaceholder: {
-    width: 210,
-    height: 297,
-    backgroundColor: "#aaa",
-    borderWidth: 1,
-    borderColor: "#aaa",
-    borderRadius: 6,
-  },
-
-  /* --- Timeline --- */
-  sectionLabel: {
-    fontSize: 16,
-    fontWeight: "500",
-    marginBottom: 10,
-  },
-  timelineContainer: {
-    flexDirection: "row",
-    gap: 1,
-    marginBottom: 30,
-    width: '100%',
-    borderWidth: 4,
-    borderColor: '#ccc',
-    backgroundColor: "#ccc",
-    borderRadius: 10,
-  },
-  timelineBar: {
-    width: 20,
-    height: 90,
-    borderWidth: 1,
-    borderColor: "#bbb",
-    justifyContent: "flex-end",
-  },
-  timelineFill: {
-    backgroundColor: "#aaa",
-    width: "100%",
-  },
-
-  /* --- Dashboard widgets --- */
-  dashboardRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 35,
-  },
-  widget: {
-    width: "48%",
-    padding: 15,
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    alignItems: "center",
-    backgroundColor: "#ccc",
-  },
-  widgetLabel: {
-    marginBottom: 10,
-    fontWeight: "500",
-  },
-  donut: {
-    width: 70,
-    height: 70,
-    borderWidth: 12,
-    borderColor: "#ddd",
-    borderRadius: 40,
-  },
-
-  /* --- Entry sections --- */
-  sectionBox: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 25,
-  },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 10,
-  },
-  sectionTitle: {
-    fontWeight: "600",
-  },
-  plus: {
-    fontSize: 22,
-    fontWeight: "600",
-  },
-  entryRow: {
-    paddingVertical: 10,
-  },
-  entryLine: {
-    height: 28,
-    backgroundColor: "#eee",
-    borderRadius: 6,
-  },
-  image: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: '#0553',
-  },
-});
