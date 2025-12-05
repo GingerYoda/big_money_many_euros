@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     width: 25,
     height: 25,
     borderRadius: 3,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: colours.border,
   },
   header: {
@@ -46,15 +46,19 @@ export const styles = StyleSheet.create({
   /* --- Timeline --- */
   sectionLabel: {
     fontSize: 16,
-    fontWeight: "500",
-    marginBottom: 10,
+    fontWeight: "600",
+    borderColor: colours.border,
+    backgroundColor: colours.primary,
+    borderRadius: 10,
+    padding: 10,
+    borderWidth: 1
   },
   timelineContainer: {
     flexDirection: "row",
     gap: 1,
     marginBottom: 30,
     width: '100%',
-    borderWidth: 4,
+    borderWidth: 1,
     borderColor: colours.border,
     backgroundColor: colours.primary,
     borderRadius: 10,
@@ -63,11 +67,13 @@ export const styles = StyleSheet.create({
     width: 20,
     height: 90,
     borderWidth: 1,
+    borderRadius: 10,
     borderColor: colours.border,
     justifyContent: "flex-end",
   },
   timelineFill: {
     backgroundColor: colours.secondary,
+    borderRadius: 10,
     width: "100%",
   },
 
@@ -88,7 +94,7 @@ export const styles = StyleSheet.create({
   },
   widgetLabel: {
     marginBottom: 10,
-    fontWeight: "500",
+    fontWeight: "600",
   },
   donut: {
     width: 70,
@@ -163,5 +169,32 @@ export const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: colours.bg,
     gap: 10
-  }
+  },
+  button: {
+    backgroundColor: colours.primary,
+    padding: 10,
+    borderRadius: 10
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colours.border,
+    padding: 10,
+    borderRadius: 6,
+    marginTop: 10,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  buttonSmall: {
+    flex: 1,
+    paddingVertical: 12,
+    marginHorizontal: 5,
+    borderRadius: 10,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: colours.text,
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });

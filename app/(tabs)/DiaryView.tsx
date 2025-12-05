@@ -1,32 +1,54 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, Image, Pressable } from "react-native";
+import { View, Text, ScrollView, Image, Pressable, Button } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import HomeButton from '@/components/HomeButton';
 import DonutProgress from '@/components/DonutProgress';
 import Accordion from '@/components/Accordion';
 import { styles } from '@/styles/styles';
+import { colours } from '@/styles/colours';
 import EntryModal from '@/components/EntryModal';
+import NewEntryModal from '@/components/NewEntryModal';
 import { sampleEntries } from '@/helpers/samples';
+
 
 
 export default function DiaryView() {
   const totalPages = 1200;
   const friend_entries = []
   const diary_entries = sampleEntries.length;
-  let read_pages = sampleEntries.reduce((sum, x) => sum + x.endPage - x.startPage, 0) 
-  let progress = read_pages / totalPages * 100;
 
-  let ratings_avg = sampleEntries.reduce((sum, x) => sum + x.rating, 0) / diary_entries;
-  let ratings_percent = ratings_avg / 5 * 100;
+  let initialPagesRead = sampleEntries.reduce((sum, x) => sum + x.endPage - x.startPage, 0);
+  let initialProgress = initialPagesRead / totalPages * 100;
+  let initialRating = sampleEntries.reduce((sum, x) => sum + (x.endPage - x.startPage)/totalPages* x.rating, 0);
+  let initialRatingPercent = initialRating / 5 * 100;
 
   const [entryModalOpen, entryModalSetOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
+  const [newEntryModalOpen, setNewEntryModalOpen] = useState(false);
+
+  const [entries, setEntries] = useState(sampleEntries);
+  const [progress, setProgress] = useState(initialProgress);
+  const [rating, setRating] = useState(initialRating);
+  const [ratingPercent, setRatingPercent] = useState(initialRatingPercent);
+
+  const handleSaveEntry = (newEntry) => {
+    setEntries((prev) => {
+        const updated = [...prev, newEntry];
+        let readPages = updated.reduce((sum, x) => sum + x.endPage - x.startPage, 0);
+        let newProgress = (readPages / totalPages) * 100;
+        setProgress(newProgress);
+        let newRating = updated.reduce((sum, x) => sum + x.rating, 0) / updated.length;
+        setRating(newRating);
+        let newRatingPercent = newRating / 5 * 100;
+        setRatingPercent(newRatingPercent);
+        return updated;
+    })
+  };
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ padding: 20 }}>
       {/* Top minimal navigation */}
       <View style={styles.topNav}>
-      {/*<Ionicons name="home" size={32} color="green" />*/}
         <HomeButton />
       </View>
 
@@ -48,10 +70,23 @@ export default function DiaryView() {
 
       </View>
 
-      {/* Progress timeline */}
-      <Text style={styles.sectionLabel}>Progress</Text>
+      {/* timeline */}
+      <View style ={styles.row}>
+        <Text style={styles.sectionLabel}>Progress</Text>
+         <Pressable style={[styles.button, {backgroundColor: colours.secondary}]} onPress={() => setNewEntryModalOpen(true)}>
+           <View style={styles.row}>
+             <Text style={styles.buttonText}>New Entry</Text>
+             <Ionicons name="add" size={16} color="black" />
+           </View >
+        </Pressable>
+      </View>
+      <NewEntryModal visible={newEntryModalOpen}
+                     onClose={() => setNewEntryModalOpen(false)}
+                     onSave={handleSaveEntry}
+                     />
+
       <View style={styles.timelineContainer}>
-        {sampleEntries.map((item, i) => (
+        {[...entries].map((item, i) => (
           <Pressable key={i} style={[styles.timelineBar, { width: (item.endPage-item.startPage)/totalPages*100 + "%" }]}
           onPress={() => {
               entryModalSetOpen(true);
@@ -87,8 +122,8 @@ export default function DiaryView() {
         <View style={styles.widget}>
         <DonutProgress label="avg.rating"
                        mode="rating"
-                       percent={ratings_percent}
-                       value={ratings_avg}
+                       percent={ratingPercent}
+                       value={rating}
                        max={5}/>
         </View>
       </View>
